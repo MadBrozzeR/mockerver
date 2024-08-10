@@ -1,6 +1,33 @@
 {
+  "name": "mockerver",
+  "version": "0.1.1",
+  "description": "Mock Server with vite plugin",
+  "main": "./dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy": "tsc && npm publish"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MadBrozzeR/mockerver.git"
+  },
+  "keywords": [
+    "mocks",
+    "mock server",
+    "vite",
+    "plugin",
+    "dev server"
+  ],
+  "author": "MadBrozzeR",
+  "license": "ISC",
+  "types": "./dist/index.d.ts",
+  "bugs": {
+    "url": "https://github.com/MadBrozzeR/mockerver/issues"
+  },
+  "homepage": "https://github.com/MadBrozzeR/mockerver#readme",
   "devDependencies": {
     "@types/node": "^22.2.0",
     "typescript": "^5.5.4"
-  }
+  },
+  "files": ["dist", "package.json", "README.md"]
 }
