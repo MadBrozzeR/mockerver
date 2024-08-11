@@ -37,7 +37,7 @@ export const requestData = (url: string) => {
   });
 };
 
-export const extractPostData = (request: http.IncomingMessage) =>
+export const getRequestData = (request: http.IncomingMessage) =>
   new Promise<Buffer>((resolve) => {
     const chunks = new Chunks();
 
@@ -76,10 +76,8 @@ export function respond(
   return response;
 }
 
-export const getQueryParams = (url: string) =>
-  url
-    .match(QUERY_PARAMS_RE)?.[1]
-    ?.split('&')
+export const getQueryParams = (url?: string) =>
+  url?.match(QUERY_PARAMS_RE)?.[1]?.split('&')
     .reduce<Record<string, string>>((result, item) => {
       const [name, value] = item.split('=');
       result[name] = decodeURIComponent(value);

@@ -20,7 +20,7 @@ export class MockCache {
     const pattern = key.replace(PARAM_RE, function (_, key) {
       params.push(key);
 
-      return '([^\\/]+)';
+      return '([^\\/?]+)';
     });
 
     this.routes[key] = {
