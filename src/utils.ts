@@ -1,9 +1,7 @@
 import http from 'http';
+import type { AllowedTypes, ServerHeaders, ServerResponse } from './types';
 
 const DEFAULT_WAIT_DELAY = 500;
-
-type Response = http.ServerResponse<http.IncomingMessage>;
-type Headers = http.OutgoingHttpHeaders;
 
 const QUERY_PARAMS_RE = /\?(.+)$/;
 
@@ -20,7 +18,7 @@ class Chunks {
 }
 
 export const requestData = (url: string) => {
-  return new Promise((resolve, reject) => {
+  return new Promise<Buffer>((resolve, reject) => {
     http
       .get(url, (response) => {
         const chunks = new Chunks();
@@ -47,10 +45,10 @@ export const getRequestData = (request: http.IncomingMessage) =>
   });
 
 export function respond(
-  response: Response,
+  response: ServerResponse,
   status: number,
-  data?: string | Buffer | object | null,
-  headers: Headers = {},
+  data?: AllowedTypes,
+  headers: ServerHeaders = {},
 ) {
   const contentType = response.getHeader('content-type');
 
@@ -85,4 +83,4 @@ export const getQueryParams = (url?: string) =>
     }, {}) || {};
 
 export const wait = (delay = DEFAULT_WAIT_DELAY) =>
-  new Promise((resolve) => setTimeout(resolve, delay));
+  new Promise<void>((resolve) => { setTimeout(resolve, delay) });

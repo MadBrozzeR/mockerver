@@ -2,14 +2,12 @@ import http from 'http';
 import { MockCache } from './mock-cache';
 import type {
   ClientRequest,
-  MockAction,
   MockRouter,
   MockServerParams,
-  RouteAction,
-  RouterExtended,
   ServerResponse,
 } from './types';
 import { respond } from './utils';
+import { Mocker } from './mocker-class';
 
 const SERVER_RESTART_DELAY = 200;
 
@@ -30,7 +28,12 @@ export const useMockServer = (
 
     if (mock) {
       try {
-        const result = mock.action(request, response, { params: mock.params });
+        const result = mock.action.call(
+          new Mocker(request, response, mock.params),
+          request,
+          response,
+          { params: mock.params }
+        );
 
         return {
           mock,
