@@ -4,6 +4,7 @@ import type {
   ServerResponse,
   AllowedTypes,
   ServerHeaders,
+  MockAction,
 } from './types';
 
 export class Mocker {
@@ -35,5 +36,9 @@ export class Mocker {
 
   request(url: string) {
     return requestData(url);
+  }
+
+  use(action: MockAction) {
+    return action.call(this, this.clientRequest, this.serverResponse, { params: this.params });
   }
 }

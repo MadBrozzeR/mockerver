@@ -28,12 +28,8 @@ export const useMockServer = (
 
     if (mock) {
       try {
-        const result = mock.action.call(
-          new Mocker(request, response, mock.params),
-          request,
-          response,
-          { params: mock.params }
-        );
+        const mocker = new Mocker(request, response, mock.params);
+        const result = mocker.use(mock.action);
 
         return {
           mock,
