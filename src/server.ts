@@ -97,7 +97,7 @@ export const useMockServer = (
     if (mocked) {
       mocked.promise
         .then((result) => {
-          if (result instanceof Response) {
+          if (result instanceof http.ServerResponse) {
             // Do nothing;
             return;
           }

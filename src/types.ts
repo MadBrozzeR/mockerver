@@ -7,7 +7,7 @@ export type ServerHeaders = http.OutgoingHttpHeaders;
 
 export type ServerArgs = [ClientRequest, ServerResponse];
 
-export type AllowedTypes = string | object | Buffer | null | undefined;
+export type AllowedTypes = string | object | Buffer | ServerResponse | null | undefined;
 export type MockAction = (
   this: Mocker,
   request: ClientRequest,
