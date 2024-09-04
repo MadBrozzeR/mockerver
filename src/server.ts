@@ -6,7 +6,7 @@ import type {
   MockServerParams,
   ServerResponse,
 } from './types';
-import { respond } from './utils';
+import { respond, wait } from './utils';
 import { Mocker } from './mocker-class';
 
 const SERVER_RESTART_DELAY = 200;
@@ -93,7 +93,7 @@ export const useMockServer = (
     if (mocked) {
       mocked.promise
         .then((result) => {
-          if (result instanceof http.ServerResponse) {
+          if (result instanceof http.ServerResponse || result === undefined) {
             // Do nothing;
             return;
           }
@@ -124,19 +124,14 @@ export const useMockServer = (
       .on('error', (error) => {
         if ('code' in error && error.code === 'EADDRINUSE') {
           TerminationRequest.send(`http://localhost:${port}`)
-            .then(() => {
-              setTimeout(() => startServer(port), SERVER_RESTART_DELAY);
-            })
-            .catch(() => {
-              log(`Failed to start Mock server. Port ${port} is busy.`);
-            });
+            .then(() => wait(SERVER_RESTART_DELAY)
+            .then(() => startServer(port)))
+            .catch(() => log(`Failed to start Mock server. Port ${port} is busy.`));
         } else {
           throw error;
         }
       })
-      .listen(port, () =>
-        log(`Mock server is started on port ${port}`),
-      );
+      .listen(port, () => log(`Mock server is started on port ${port}`));
   };
 
   const mockServerPlugin = () => ({

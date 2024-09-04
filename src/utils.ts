@@ -55,20 +55,32 @@ export function respond(
   if (data instanceof Buffer) {
     if (!response.headersSent) {
       response.writeHead(status, {
-        'content-type': contentType || 'text/plain',
+        'content-type': contentType || 'application/octet-stream',
+        'content-length': data.length,
         ...headers,
       });
     }
     response.end(data);
-  } else {
+  } else if (data instanceof Object) {
+    const dataToSend = JSON.stringify(data);
     if (!response.headersSent) {
       response.writeHead(status, {
         'content-type': contentType || 'application/json; charset=utf-8',
+        'content-length': Buffer.byteLength(dataToSend),
         ...headers,
       });
     }
-    const dataToSend = data instanceof Object ? JSON.stringify(data) : data;
-    response.end(dataToSend || '');
+    response.end(dataToSend);
+  } else {
+    const dataToSend = data || '';
+    if (!response.headersSent) {
+      response.writeHead(status, {
+        'content-type': contentType || 'text/plain; charset=utf-8',
+        'content-length': Buffer.byteLength(dataToSend),
+        ...headers,
+      });
+    }
+    response.end(dataToSend);
   }
 
   return response;
